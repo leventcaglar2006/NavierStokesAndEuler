@@ -1,0 +1,30 @@
+name: Navier-Stokes Lean Verification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Download source code
+        uses: actions/checkout@v4
+
+      - name: Install Lean and Mathlib
+        uses: leanprover/lean-action@v1
+        env:
+          LEAN_NUM_THREADS: "1"
+        with:
+          build: false
+          test: false
+          use-mathlib-cache: true
+
+      - name: Verify Navier-Stokes
+        env:
+          LEAN_NUM_THREADS: "1"
+        run: lake build NavierStokes
